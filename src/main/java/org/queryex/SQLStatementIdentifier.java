@@ -33,9 +33,35 @@ public class SQLStatementIdentifier {
         //String regex = "(?s)(?<=\\n)((?:SELECT|INSERT|UPDATE|DELETE)\\b(?:\\s*\\([^()]*\\))*[^;]*)(?=\\n)";
         String regex = "\\b(SELECT|INSERT|UPDATE|DELETE)\\b(?:\\s*\\([^;]*\\))*[^;]*";
 
+
+
+
+        /////pl sql
+
+        text = "This is some text.\n" +
+                "DECLARE\n" +
+                "   v_name VARCHAR2(50) := 'John'\n" +
+                "BEGIN\n" +
+                "   -- PL/SQL code here\n" +
+                "   DBMS_OUTPUT.PUT_LINE('Hello, ' || v_name || '!')\n" +
+                "END\n" +
+                "And here is another paragraph.\n" +
+                "DECLARE\n" +
+                "   v_count NUMBER := 10\n" +
+                "BEGIN\n" +
+                "   -- More PL/SQL code here\n" +
+                "   DBMS_OUTPUT.PUT_LINE('Count: ' || v_count)\n" +
+                "END\n" +
+                "This is the end.";
+
+        // Define a regular expression pattern to match PL/SQL code with variables between two paragraphs without semicolons
+        regex = "(?s)(?<=\\n)(DECLARE(.*?)BEGIN.*?END)(?=\\n)";
+
+
+
+
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(text);
-
         while (matcher.find()) {
             String sqlStatement = matcher.group();
             System.out.println("Found SQL statement: " + sqlStatement);
